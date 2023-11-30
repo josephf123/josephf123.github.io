@@ -1,8 +1,7 @@
 ---
 title: Project Seasame Fox 🦊
 date: 2022-06-16 00:00:00
-categories: [CYBER, WIFI]
-tags:      # TAG names should always be lowercase
+categories: [Cyber, Wifi]
 ---
 
 **TLDR:** I made a device that logs all the wifi traffic and maps it out. It can also do some hacking stuff.

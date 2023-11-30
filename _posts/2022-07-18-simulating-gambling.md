@@ -2,6 +2,7 @@
 title: "Simulating gambling tactics" 
 date: 2022-07-18T02:17:11+01:00 
 math: true
+categories: [Simulation]
 ---
 This is a story about one time when I was and I stumbled upon a new domain of interest. This interest was related to gambling and it occured when a friend of mine told me of a “foolproof” betting strategy for the game of roulette.
 
@@ -130,7 +131,7 @@ Depending on the parameters, the graph will either have an asymptote at 1, 0 or 
 
 It seems there is a pattern for when the graph has an asymptote at 1/\\(e\\).
 
-$$p = 1 - \\frac{1}{z}$$
+$$ p = 1 - \frac{1}{z} $$
 
 If \\(p > 1 - 1/z \\), the odds will converge to 100% and if \\(p < 1 - 1/z \\) the odds will go down to 0%.
 
