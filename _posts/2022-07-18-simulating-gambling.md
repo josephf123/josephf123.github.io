@@ -2,7 +2,7 @@
 title: "Simulating gambling tactics" 
 date: 2022-07-18T02:17:11+01:00 
 math: true
-categories: [Simulation]
+categories: [ Simulation ]
 ---
 This is a story about one time when I was and I stumbled upon a new domain of interest. This interest was related to gambling and it occured when a friend of mine told me of a “foolproof” betting strategy for the game of roulette.
 
