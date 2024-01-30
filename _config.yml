@@ -16,7 +16,7 @@ timezone: America/Los_Angeles
 
 title: My blog
 
-tagline: bruh
+#tagline: bruh
 
 description: >- # used by seo meta and the atom feed
  Talking about things I find interesting
