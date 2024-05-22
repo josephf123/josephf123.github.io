@@ -1,9 +1,10 @@
---- 
-title: "Simulating gambling tactics" 
-date: 2022-07-18T02:17:11+01:00 
-math: true
-categories: [ Simulation ]
 ---
+title: "Simulating gambling tactics"
+date: 2022-07-18T02:17:11+01:00
+math: true
+categories: [Simulation]
+---
+
 This is a story about one time when I was and I stumbled upon a new domain of interest. This interest was related to gambling and it occured when a friend of mine told me of a “foolproof” betting strategy for the game of roulette.
 
 ## The gambling strategy
@@ -11,13 +12,13 @@ This is a story about one time when I was and I stumbled upon a new domain of in
 For any games where there is a near 50% chance of winning and where winning doubles your money and losing loses all your money you do this: First bet $1, if you lose this bet instead of betting $1, on the next turn you bet $2 (double the previous bet), if you lose again, bet $4, then $8 etc. If you win however, you restart the betting number and bet $1 again.
 So the tactic is basically double-down each time you lose. In the above scenario, if you lose the first bet, you are down $1, if you lose the second bet you are then down $3 ($2 + $1), if you lose the next bet you are down $7 ($4 + $2 + $1) etc. Whenever you win, assuming you eventually win, you will be net positive. For example if you were down $3 and you then bet $4, you would then be up $1 in total. Below there is a table to illustrate this:
 
-|Current Bet |Net Money|If you win this bet (but lost all previous ones)|
-|-----|--------|--------|
-|  1  |   0    |   1    |
-|  2  |   -1   |   1    |
-|  4  |   -3   |   1    |
-|  8  |   -7   |   1    |
-|  16 |   -15  |   1    |
+| Current Bet | Net Money | If you win this bet (but lost all previous ones) |
+| ----------- | --------- | ------------------------------------------------ |
+| 1           | 0         | 1                                                |
+| 2           | -1        | 1                                                |
+| 4           | -3        | 1                                                |
+| 8           | -7        | 1                                                |
+| 16          | -15       | 1                                                |
 
 Now although $1 is a small amount to win, this $1 is an arbitrary number, it could me multiples of 1000 (in this case multiply everything by 1000) and therefore each time you win, you would win $1000. The point is, supposing you have enough money you could hypothetically keep winning and the only way to lose is to lose X amount of times in a row so you don’t have any money.
 
@@ -41,7 +42,7 @@ Gambler’s ruin is a statistical concept that describes the probability of winn
 
 No matter how lucky a person is, eventually the random walk will lead to the player having no money.
 
-Understanding the maths a bit more, the agent starts with M money, this means they can lose \\(log\_2(M+1)\\) times in a row before they go bankrupt, we will call this \\(Z\\). e.g If the agent starts with $1023, this means they would lose all their money if they lost
+Understanding the maths a bit more, the agent starts with M money, this means they can lose \\(log_2(M+1)\\) times in a row before they go bankrupt, we will call this \\(Z\\). e.g If the agent starts with $1023, this means they would lose all their money if they lost
 
 $$Z=log\_2(M+1)=log\_2(1024)=10$$
 
@@ -91,7 +92,7 @@ I first broke this problem down into its individual components. First, what is t
 
 No matter what I did, it seems if the odds are 50/50, there is no way to have an edge through leveraging your money or using a certain tactic. These are the rules of probability and it is not possible to "beat luck” and have a systematic method to improve your chances.
 
-More research led me to Ed Thorpe’s article about the Martingale Tactic ([http://www.edwardothorp.com/wp-content/uploads/2016/11/SystemsForRoulette\_l.pdf](http://www.edwardothorp.com/wp-content/uploads/2016/11/SystemsForRoulette_l.pdf)) as well as a good book called The Theory of Gambling and Statistics ([https://au1lib.org/book/702712/119692](https://au1lib.org/book/702712/119692)). In Chapter 3: The Basic Theorems, Epstein dispells the myth of the Maringale tactic working and reiterates what I have written here.
+More research led me to Ed Thorpe’s article about the Martingale Tactic ([https://www.edwardothorp.com/wp-content/uploads/2016/11/SystemsForRoulette_l.pdf](https://www.edwardothorp.com/wp-content/uploads/2016/11/SystemsForRoulette_l.pdf)) as well as a good book called The Theory of Gambling and Statistics ([https://au1lib.org/book/702712/119692](https://au1lib.org/book/702712/119692)). In Chapter 3: The Basic Theorems, Epstein dispells the myth of the Maringale tactic working and reiterates what I have written here.
 
 ## Conclusion
 
@@ -103,8 +104,7 @@ There is no way to beat a system where the “odds” are not in your favour. Al
 
 Give up. Don’t go to the casino.
 
-Appendix
---------
+## Appendix
 
 Here’s a link to the code in python and in c++ if you want to play around
 
@@ -116,10 +116,10 @@ Why is it when I do experimental data on what the probability of doubling your m
 
 Why the model is not exact:
 
-*   it is not accounting for losing \\(x\\)/2 in a row and then another \\(x\\)/2 in a row?
-*   How many ways can you lose
-*   How many ways can you win
-*   Recursive formula? There are infinite ways to get back to the same spot.
+- it is not accounting for losing \\(x\\)/2 in a row and then another \\(x\\)/2 in a row?
+- How many ways can you lose
+- How many ways can you win
+- Recursive formula? There are infinite ways to get back to the same spot.
 
 For the function:
 
@@ -134,4 +134,3 @@ It seems there is a pattern for when the graph has an asymptote at 1/\\(e\\).
 $$ p = 1 - \frac{1}{z} $$
 
 If \\(p > 1 - 1/z \\), the odds will converge to 100% and if \\(p < 1 - 1/z \\) the odds will go down to 0%.
-
