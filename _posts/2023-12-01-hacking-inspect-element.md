@@ -56,7 +56,7 @@ Of course this happens. The client side logic detects that the phone number is "
 
 ## Changing the POST request
 
-Looking at the code, we see two main differences in the POST request that is crafted depending on if we are loggin in via "telephone" or via "account". First it is in the HTTP header. The endpoint we are going to via telephone is
+Looking at the code, we see two main differences in the POST request that is crafted depending on if we are logging in via "telephone" or via "account". First it is in the HTTP header. The endpoint we are going to via telephone is
 
 `/api/aruba_a_c/smslogin/gwId/Test`
 
