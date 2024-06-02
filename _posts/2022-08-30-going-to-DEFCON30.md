@@ -1,8 +1,9 @@
 ---
-title: Going to DEFCON30 in 2022
+title: Going to DEFCON30
 date: 2022-08-30 00:00:00
 categories: [Cyber]
 draft: true
+post_description: A brief writeup of when I went to DEFCON in 2022
 ---
 
 This is a quick writeup of when I got to go to DEFCON and Blackhat in August 2022.

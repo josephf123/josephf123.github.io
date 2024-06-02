@@ -2,6 +2,7 @@
 title: Hacking China with inspect element
 date: 2023-12-01 00:00:00
 categories: [Cyber]
+post_description: Using reverse engineering to fix the wifi network login portal
 ---
 
 ## Intro
