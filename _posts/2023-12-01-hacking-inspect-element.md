@@ -1,5 +1,5 @@
 ---
-title: Hacking China with inspect element
+title: Hacking wifi portals with inspect element
 date: 2023-12-01 00:00:00
 categories: [Cyber]
 post_description: Using reverse engineering to fix the wifi network login portal
@@ -11,15 +11,15 @@ Recently I went to China, and on my way back home I stopped off in Guangzhou for
 
 Hmm it seems that to connect to the wifi, you have to register your passport to get a wifi login code. Ahh of course, just china trying to give you a personalised experience!
 
-![photo of kiosk](/assets/img/hacking_china/kiosk.jpg)
+![photo of kiosk](/assets/img/hacking_wifi_portal/kiosk.jpg)
 
-![photo of login page](/assets/img/hacking_china/login_photo.png)
+![photo of login page](/assets/img/hacking_wifi_portal/login_photo.png)
 
 After sacrificing my last shred of privacy while in China, I succumbed and scanned my passport to get my login details. However, when trying to connect to the wifi from my laptop, nothing seemed to work.
 
 After many failed attempts of spamming the 'login button', I thought about what all the great hackers do. Inspect element.
 
-![error message](/assets/img/hacking_china/error_msg.png)
+![error message](/assets/img/hacking_wifi_portal/error_msg.png)
 
 Logging into the wifi, you either needed a chinese phone number or to scan your passport. Since I didn't have a chinese phone number I was using the other way of logging in and so I found it strange when I got this error message.
 
@@ -92,7 +92,7 @@ username=AB12345&password=123456
 
 Once we do this, and we forward our payload, after a few redirects, it works! I can now have access to the vastness of the internet.
 
-![success](/assets/img/hacking_china/success.png)
+![success](/assets/img/hacking_wifi_portal/success.png)
 
 ## Conclusion
 
