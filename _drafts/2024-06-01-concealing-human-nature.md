@@ -3,7 +3,7 @@ title: Concealing human nature
 date: 2024-06-01 00:00:00
 draft: true
 categories: [Writing]
-post_description: tbd
+post_description: tbdaa
 ---
 
 Going back to that thing about if shitty people do it, you can really see it’s true shape.
