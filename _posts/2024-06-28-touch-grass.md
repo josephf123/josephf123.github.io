@@ -8,7 +8,7 @@ mermaid: true
 
 Touch grass is a common slang term referring to people that are chronically online, sometimes you just need to go outside and touch some grass and be in the real world. That's what this is, a way to go outside and explore Australia.
 
-# Introduction
+## Introduction
 
 Sprawled across Australia is a vast infrastructure that is completely untapped by the public, these landmarks fill big cities and small towns alike with its iconic presence.
 
@@ -22,11 +22,11 @@ I thought it would be fun to do something with these, there are thousands all ar
 
 To play the game, you have to buy a physical device, the device will then wait until you are at a Telstra Wi-Fi hotspot and ping my server to know that you have reached one. You will receive a notification from the web app on your phone which will then allow you to confirm that you are actually there, gaining you points.
 
-This post will be a deep dive in the technical engineering effort of making this project, including the fine grained details of the wifi handshake as well as how I implemented the technology stack.
+This post will be a deep dive in the technical engineering effort of making this project, including the fine grained details of the wifi handshake as well as how I implemented the technology stack. This post is targeted to a more technical audience, you have been warned!
 
-# Working with Wi-Fi
+## Working with Wi-Fi
 
-The initial investigation began by understanding the mechanism of how you connect to the hotspot. I have one near where I live so I was able to do some field testing. The Telstra Wi-Fi hotspot has a captive portal that initially opens up when connecting to the access point, on the captive portal you must agree to the terms and conditions and then you have Wi-Fi. To understand how I could connect using my Raspberry Pi to the Wi-Fi I needed to understand how this captive portal works. Using tools like Burp Suite and the web developer tools on the browser allowed me to understand a bit better what was going on under the hood.
+The initial investigation began by understanding the mechanism of how you connect to the hotspot. I have one near where I live so I was able to do some field testing. The Telstra Wi-Fi hotspot has a captive portal that initially opens up when connecting to the access point, on the captive portal you must agree to the terms and conditions and then you have Wi-Fi. To understand how I could connect my Raspberry Pi to the Wi-Fi I needed to understand how this captive portal works. Using tools like Burp Suite and the web developer tools on the browser allowed me to understand a bit better what was going on under the hood.
 
 What happens when you don't agree to the terms and conditions? [Captive portals](https://en.wikipedia.org/wiki/Captive_portal) work by redirecting all traffic from the access point if they see that the client is not authenticated, the main way they do this is through the MAC address. If the client is not authenticated, they either intercept web traffic and return a 302 redirect or they use a DNS server to route all unautheticated requests to their captive portal[^1]. In this case, I believe it uses a 302 redirect because when I curl any site (without going through portal) I get a 302
 
@@ -83,28 +83,28 @@ Playing around with the paramters in the initial redirect (mac, real_ip, client_
    `curl -b /tmp/cookies.txt https://apac.network-auth.com/splash/NAxIVbNc.5.167/grant?continue_url=`
 4. Congratulations you are now authenticated
 
-# Creating a Client + Server
+## Creating a Client + Server
 
 My Raspberry Pi can successfully connect to the hotspot. Now what?
 
 I will use use the information I have collected about the handshake to connect with the hotspot (mac, real_ip etc) and send this to my server, this allows a way for me to know if you have connected to a hotspot and then give you points.
 
-I used Golang as my prefered choice for client-server communications because it is fast, lightweight and built in networking capabilities. A simple Go server and client were setup to take in some data from the handshake, encrypt in and then send it over the internet to my server.
+I used Golang as my prefered choice for client-server communications because it is fast, lightweight and has built in networking capabilities. A simple Go server and client were setup to take in some data from the handshake, encrypt it and then send it over the internet to my server.
 
-It was a bit of overkill and completely unneccessary but I also created a simple custom protocol for how the data was sent, this was done as a fun exercise and I realise that it is not the best maintenance, upgradability and scalability but it was fun.
+It was a bit of overkill and completely unneccessary but I also created a simple custom protocol for how the data was sent, this was done as a fun exercise and although it is not the best for maintenance and upgradability is was still fun.
 
 The protcol sits on top of TCP and below TLS. Its a pretty basic way that allowed me to pack the data and send it as a chunk to the server. For extra extra redundancy, not only is the data encrypted using TLS but I encrypt the data before it is sent using AES-GCM for extra security. This means that you can't see the payload on device without the key (or reverse engineering).
 
 The server checks the payload that comes in and does some checking through the header of the payload to ensure it is valid. It then decrypts the data and stores it in a PostgresDB.
 
-# Designing the user experience
+## Designing the user experience
 
 The frontend framework is pretty standard. I'm using Nextjs with NextUI and tailwind components for design. I incorporated features like a visual map to see which hotspots you have visited, data about how many hotspots you've found and other useful statistics and I created a smooth mobile friendly user experience as it would primarily be used on a phone. Here are some screenshots of the app
 
 ![UI 2](/assets/img/touch-grass/ui-2.png){:style="width: 100%; display:block; margin-left:auto; margin-right:auto "}\\
 ![UI 1](/assets/img/touch-grass/ui-1.png){:style="width: 100%; display:block; margin-left:auto; margin-right:auto "}
 
-# Real time notifications
+## Real time notifications
 
 One thing I really wanted to get right was the notifications. I wanted a seamless and delay-free experience from when the Raspberry Pi connects to the hotspot. To do this I would need to integrate a notification system between the three parts of my app. The database, the backend and the frontend.
 
@@ -122,7 +122,7 @@ socket.onmessage = (event) => {
 ```
 
 **DB <-> Server** \\
-This was actually a bit trickier. To implement a real time update and trigger, I had to completely switch databases. I was initially using MySQL but since they were lacking real-time functionality, I opted for Postgres instead which had pg_notify() a handy feature that allows you to trigger a notificaiton if a certain query passes.
+This was actually a bit trickier. To implement a real time update and trigger, I had to completely switch databases. I was initially using MySQL but since they were lacking real-time functionality, I opted for Postgres instead which had pg_notify() a handy feature that allows you to trigger a notification if a certain query passes.
 
 ```sql
 
@@ -143,9 +143,9 @@ FOR EACH ROW EXECUTE FUNCTION notify_insert();
 
 This code listens for any INSERTs into the DB and triggers my go server which then sends the data to the client through the websocket.
 
-# Infrastructure
+## Infrastructure
 
-To build out the infrastructure I wanted to have a modular approach, something that was scalable in the case that millions of people are using the app, I also wanted it to be easy to deploy, upgrade, test etc. For this, I used Dockerfiles and docker-compose for an easy way to build up the infrastructure in one click. The services that are running on the docker compose include the frontend server which uses Nextjs, the backend server that is run using Golang, this server interacts with both the frontend but also processes the data from the device which is sent once the device connects to a hotspot. I have a Postgres backend which has some runscripts for setup and to configure notifications and I also have an NGINX reverse proxy that redirects traffic and faces the internet.
+To build out the infrastructure I wanted to have a modular approach, something that was scalable in the case that millions of people are using the app, I also wanted it to be easy to deploy, upgrade, test etc. For this, I used Dockerfiles and docker-compose for an easy way to build up the infrastructure in one click. This would make it easy to transition to Kubernetes if I need to horizontally scale. The services that are running on the docker compose include the frontend server which uses Nextjs, the backend server that is run using Golang, this server interacts with both the frontend but also processes the data from the device which is sent once the device connects to a hotspot. I have a Postgres backend which has some runscripts for setup and to configure notifications and I also have an NGINX reverse proxy that redirects traffic and faces the internet.
 
 Below is a diagram that pretty accurately shows how these components interact with each other and the flow of data through the system
 
@@ -203,11 +203,11 @@ graph TB
 
 ```
 
-Designing and configuring the hardware device that will connect to the hotspot also involved some engineering work. Before I began, I considered creating an ios or android app instead. Problems arose when I realised there were many restrictions in regards to how much you can control the network and wifi data on phone apps. Also I thought it would be a lot cooler building a physical thing rather than just some lame app.
+Designing and configuring the hardware device that will connect to the hotspot also involved some engineering work. Before I began, I considered creating an ios or android app however problems arose when I realised there were a lot of limitations involving interactions with the device and wifi connections and network requests. I thought getting the actual connection was a priority for the game and thought building a physical device was cooler than just an app.
 
-In order to productionise and automate the setup of the raspberry pi, I created an ansible playbook that gets a freshly imaged RPi with Raspberry Pi OS Lite and fully configures the setup, this setup includes downloading the appropriate packages, cloning the github, generates some Public/Private keys (explained below), sets up the nmconnection (network manager connection) file, the bash script, the systemd service and the golang binary that runs on device.
+In order to productionise and automate the setup of the raspberry pi, I created an ansible playbook that gets a freshly imaged RPi with Raspberry Pi OS Lite and fully configures the setup, this setup includes downloading the appropriate packages, cloning the github, generating some public/private keys (explained below), setting up the nmconnection (network manager connection) file, the bash script, the systemd service and the golang binary that runs on device.
 
-# Security is important!
+## Security is important!
 
 Security is important and I wanted to harden the system from tampering and bypassing.
 
@@ -250,7 +250,7 @@ sequenceDiagram
 
 ```
 
-# Conclusion
+## Conclusion
 
 This is very much a work in progress, I just wanted something written down about some of the things that I have been working on recently. The application is pretty much ready to be played, I'll soon have a spot where you can purchase a device so you can play the game. There's still a lot of cool features that I'm excited to add in the near future, I want this to be a fun way to get outside and go on an adventure, to see Australia including visiting small towns and places you would never normally visit.
 
